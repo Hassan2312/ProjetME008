@@ -1,18 +1,6 @@
 #include <stdio.h>
 #define n 101
 
-void factoriser_tridiago(float d[n], float c[n], float a[n], float l[n],
-                         float u[n], float v[n]) {
-  int i;
-  c[n - 1] = 0, v[n - 1] = 0, l[0] = 0;
-  u[0] = d[0];
-  for (i = 0; i < n; i++) {
-    v[i] = c[i];
-    l[i + 1] = a[i + 1] / u[i];
-    u[i + 1] = d[i + 1] - l[i + 1] * v[i];
-  }
-}
-
 void afficher_vect(float x[n]) {
   int i;
   printf("--------------------------------------\n");
