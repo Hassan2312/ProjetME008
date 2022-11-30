@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define n 100
+#define n 101
 
 void factoriser_tridiago(float d[n], float c[n], float a[n], float l[n],
                          float u[n], float v[n]) {
@@ -26,14 +26,14 @@ void CopyTab(float a[n], float b[n]) {
     a[i] = b[i];
 }
 
-void init(float h, float a[n], float c[n], float d[n]) {
+void init_A(float h, float a[n], float c[n], float d[n]) {
   for (int i = 0; i < n; i++) {
     a[i] = h;
     c[i] = h;
     d[i] = 1 - 2 * h;
   }
-  d[0] = 1 - h;
-  d[n - 1] = 1 - h;
+  a[n - 1] = 2*h;
+  c[0] = 2*h;
 }
 
 void initU(float Un[n]) {
@@ -60,9 +60,8 @@ void Un_instant_t (float Unt[n], float instant, float dt, float dx) {
   float a[n], c[n], d[n];
   float l[n], u[n], v[n];
   float h = dt / (dx * dx);
-  init(h, a, c, d);
+  init_A(h, a, c, d);
   initU(Unt);
-  factoriser_tridiago(d, c, a, l, u, v);
   for (int i = 0; i * dt < instant; i++) {
     updateUn(a, c, d, Unt);
     }
