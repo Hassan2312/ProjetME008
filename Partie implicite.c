@@ -6,8 +6,8 @@ void factoriser_tridiago(float d[n], float c[n], float a[n], float l[n],
   int i;
   v[n - 1] = 0, l[0] = 0;
   u[0] = d[0];                                                                  //  d0  c0  0    0   0              1    0   0   0      u0  v0  0   0
-  for (i = 0; i < n; i++) {                                                     //  a1  d1  c1   0   0              l0   1   0   0      0   u1  v1  0
-    v[i] = c[i];                                                                //  0   a2  d2  c2   0              0   l1   1   0      0   0   u2  v2
+  for (i = 0; i < n; i++) {                                                     //  a1  d1  c1   0   0              l1   1   0   0      0   u1  v1  0
+    v[i] = c[i];                                                                //  0   a2  d2  c2   0              0   l2   1   0      0   0   u2  v2
     l[i + 1] = a[i + 1] / u[i];                                                 //  ...                             ...                 ...
     u[i + 1] = d[i + 1] - l[i + 1] * v[i];                                      //  0   ...    an-1  dn-1           0   0  ln-1  1      0   0   0  un-1
   }
