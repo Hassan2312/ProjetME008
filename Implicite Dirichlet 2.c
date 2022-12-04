@@ -34,7 +34,7 @@ void initU(float Un[n]) {
     else
       Un[i] = 10;
   }
-  //Un[mid] = 5.5;
+  Un[mid] = 5.5;
 }
 
 void init_C(float h, float a[n], float c[n], float d[n]) {
@@ -43,15 +43,14 @@ void init_C(float h, float a[n], float c[n], float d[n]) {
     c[i] = -h;
     d[i] = 1 + 2 * h;
   }
-  c[0] = -2*h;
-  a[n - 1] = -2*h;
 }
 
-void resol_LU_Neumann(float l[n], float u[n], float v[n], float x[n], float b[n]) {
-  float y[n];
-  y[0]=b[0];
+void resol_LU_Neumann(float l[n], float u[n], float v[n], float x[n], float un[n]) {
+  float y[n], float d[n] = {0};
+  d[0] = 
+  y[0]=un[0]+d[0];
   for (int i = 1; i < n; i++) {
-    y[i]=b[i]-l[i]*y[i-1];
+    y[i]=un[i]-l[i]*y[i-1];
   }
   x[n-1]=y[n-1]/u[n-1];
   for (int i = n-2; i >= 0; i--) {
