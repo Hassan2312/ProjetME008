@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include "utils/utils.h"
+
 #define n 99        //Inutile de calculer u0 et u100
 
 void factoriser_tridiago(float d[n], float c[n], float a[n], float l[n],
@@ -68,6 +71,42 @@ void Un_instant_t(float Unt[n], float instant, float dt, float dx, float u0, flo
   }
 }
 
+
+void save_instant_T(float Unt[n],float dt,float dx,float tmax,float u0,float u100, float list_t[], int lenght){
+  float a[n], c[n], d[n];
+  float b[n] = {0};
+  float h = dt / (dx * dx);
+
+  FILE* out = fopen("output/Explicite_Dirichlet_2.dat","wt");
+
+  //gestion de la recherche du temps recherche
+  int currentTimeIndex = 0;
+
+  //Range les temps de stop dans l'ordre croissant
+  //ne fonctionne pas pour l'instant
+  //sortFloatTab(list_t,lenght);  
+
+  b[0] = u0*h;
+  b[n-1] = u100*h;
+  init(h, a, c, d);
+  initU(Unt);
+
+
+  for (int i = 0; i * dt < list_t[lenght-1]; i++) {
+    if (i*dt>list_t[currentTimeIndex])
+    { 
+      fprintVect(out,Unt,n,i*dt);
+      currentTimeIndex++;
+    }
+    
+    updateUn(a, c, d, Unt, b);
+  }
+
+  fclose(out);
+
+}
+
+
 int main(void) {
 
   float dt, dx;
@@ -79,23 +118,27 @@ int main(void) {
   float u0 = 1;          //Dirichlet u(x=-10, t) = 1
   float u100 = 10;       //Dirichlet u(x=10, t) = 10
 
+  float list_t[5] = {1,2,3,4,20};
+
   //Un_instant_t(Un1, 1, dt, dx);
   //Un_instant_t(Un2, 2, dt, dx);
   //Un_instant_t(Un3, 3, dt, dx);
   //Un_instant_t(Un4, 4, dt, dx);
-  Un_instant_t(Un200, 200, dt, dx, u0, u100);
+  //Un_instant_t(Un200, 200, dt, dx, u0, u100);
 
-  FILE *out1 = fopen("Un200.txt", "wt");
+  save_instant_T(Un200,dt,dx,200,u0,u100,list_t,5);
+
   
-  fprintf(out1, "%f\t%f\n", - 10., u0);
-  for (int i = 0; i < n; i++) {
-    fprintf(out1, "%f\t%f\n", i * dx - 10, Un200[i]);
-  }
-  fprintf(out1, "%f\t%f\n", 10., u100);
-  fclose(out1);
+  
+  // fprintf(out1, "%f\t%f\n", - 10., u0);
+  // for (int i = 0; i < n; i++) {
+  //   fprintf(out1, "%f\t%f\n", i * dx - 10, Un200[i]);
+  // }
+  // fprintf(out1, "%f\t%f\n", 10., u100);
+  // fclose(out1);
 
   //afficher_vect(Un1);
-  afficher_vect(Un200);
+  system("(cd Script && gnuplot Explicite_Dirichlet_2.p)");
 
   return 0;
 }
