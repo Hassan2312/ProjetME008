@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "utils/utils.h"
 
+#define TAILLE_INTERVALLE 20
+
 #define n 99        //Inutile de calculer u0 et u100
 
 void factoriser_tridiago(float d[n], float c[n], float a[n], float l[n],
@@ -107,11 +109,38 @@ void save_instant_T(float Unt[n],float dt,float dx,float tmax,float u0,float u10
 }
 
 
+void save_position_X(float Unt[n],float dt,float dx,float tmax,float u0,float u100, float list_x[], int lenght){
+
+  float a[n], c[n], d[n];
+  float b[n] = {0};
+  float h = dt / (dx * dx);
+  float proportionalite = TAILLE_INTERVALLE/(n*1.0);
+  
+  init(h, a, c, d);
+  initU(Unt);
+
+  FILE *out1 = fopen("output/Explicite_Dirichlet_3.dat","wt");
+  
+ 
+  for (int i = 0; i * dt < 200; i++) {
+    fprintf( out1, "%f\t", i*dt); //Impression du temps au debut de la ligne 
+    for (int j = 0; j < lenght; j++)
+    {
+      int k = ((int)(list_x[j]/proportionalite))+(n/2);
+      fprintf(out1, "%f\t",Unt[k]);
+    }
+    fprintf(out1,"\n");
+    
+    updateUn(a, c, d, Unt,b);
+  }
+  fclose(out1);
+  
+}
+
+
 int main(void) {
 
   float dt, dx;
-  //scanf("%f", &dt);
-  //scanf("%f", &dx);
   dt=0.01;
   dx=0.2;
   float Un1[n], Un2[n], Un3[n], Un4[n], Un200[n];
@@ -120,25 +149,19 @@ int main(void) {
 
   float list_t[5] = {1,2,3,4,20};
 
-  //Un_instant_t(Un1, 1, dt, dx);
-  //Un_instant_t(Un2, 2, dt, dx);
-  //Un_instant_t(Un3, 3, dt, dx);
-  //Un_instant_t(Un4, 4, dt, dx);
-  //Un_instant_t(Un200, 200, dt, dx, u0, u100);
+  float list_x[5] = {-8,-4,0,4,8};
 
-  save_instant_T(Un200,dt,dx,200,u0,u100,list_t,5);
+
+
+  save_instant_T(Un1,dt,dx,200,u0,u100,list_t,5);
 
   
-  
-  // fprintf(out1, "%f\t%f\n", - 10., u0);
-  // for (int i = 0; i < n; i++) {
-  //   fprintf(out1, "%f\t%f\n", i * dx - 10, Un200[i]);
-  // }
-  // fprintf(out1, "%f\t%f\n", 10., u100);
-  // fclose(out1);
+  save_position_X(Un2,dt,dx,200,u0,u100,list_x,5);
 
-  //afficher_vect(Un1);
-  system("(cd Script && gnuplot Explicite_Dirichlet_2.p)");
+
+
+  //system("(cd Script && gnuplot Explicite_Dirichlet_2.p)");
+  system("(cd Script && gnuplot Explicite_Dirichlet_3.p)");
 
   return 0;
 }
