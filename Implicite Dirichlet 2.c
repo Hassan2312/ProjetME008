@@ -45,16 +45,20 @@ void init_C(float h, float a[n], float c[n], float d[n]) {
   }
 }
 
-void resol_LU_Neumann(float l[n], float u[n], float v[n], float x[n], float un[n]) {
-  float y[n], float d[n] = {0};
-  d[0] = 
-  y[0]=un[0]+d[0];
-  for (int i = 1; i < n; i++) {
-    y[i]=un[i]-l[i]*y[i-1];
+void resol_LU_Neumann(float l[n], float u[n], float v[n], float x[n], float un[n], float h) {
+  float y[n], d_const[n] = {0};
+  float u0 = 1;
+  float u100 = 10;
+  d_const[0] = h*u0;
+  d_const[n - 1] = h*u100;
+  y[0] = un[0] + d_const[0];
+  for (int i = 1; i < n-1; i++) {
+    y[i] = un[i] - l[i]*y[i-1];
   }
-  x[n-1]=y[n-1]/u[n-1];
+  y[n-1] = un[n-1] + d_const[n-1] - l[n-1]*y[n-2];
+  x[n-1] = y[n-1]/u[n-1];
   for (int i = n-2; i >= 0; i--) {
-    x[i]=(y[i]-v[i]*x[i+1])/u[i];
+    x[i] = (y[i]-v[i]*x[i+1])/u[i];
   }
 }
 
@@ -67,7 +71,7 @@ int main(void) {
   init_C(mu, a, c, d);
   factoriser_tridiago(d, c, a, l, u, v);
   for(int i=0; i*dt<=200; i++) {
-    resol_LU_Neumann(l, u, v, un1, un);
+    resol_LU_Neumann(l, u, v, un1, un, mu);
     CopyTab(un, un1);
     }
   afficher_vect(un);
