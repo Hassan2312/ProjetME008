@@ -17,7 +17,7 @@ void afficher_vect(float x[n]) {
   int i;
   printf("--------------------------------------\n");
   for (i = 0; i < n; i++)
-    printf("%f\n", x[i]);
+    printf("%.9f\n", x[i]);
   printf("--------------------------------------\n");
 }
 
@@ -27,23 +27,14 @@ void CopyTab(float a[n], float b[n]) {
 }
 
 void initU(float Un[n]) {
+  int mid = (int)(n/2);
   for (int i = 0; i < n; i++) {
-    if (i < 50)
+    if (i < mid)
       Un[i] = 1;
     else
       Un[i] = 10;
   }
-  Un[49] = 5.5;
-}
-
-void updateUn(float a[n], float c[n], float d[n], float Un[n]) {
-  float Un1[n];
-  Un1[0] = d[0] * Un[0] + c[0] * Un[1];
-  Un1[n - 1] = d[n - 1] * Un[n - 1] + a[n - 1] * Un[n - 2];
-  for (int i = 1; i < n - 1; i++)
-    Un1[i] = a[i] * Un[i - 1] + d[i] * Un[i] + c[i] * Un[i + 1];
-
-  CopyTab(Un, Un1);
+  Un[mid] = 5.5;
 }
 
 void init_C(float h, float a[n], float c[n], float d[n]) {
@@ -56,31 +47,30 @@ void init_C(float h, float a[n], float c[n], float d[n]) {
   a[n - 1] = -2*h;
 }
 
+void resol_LU_Neumann(float l[n], float u[n], float v[n], float x[n], float b[n]) {
+  float y[n];
+  y[0]=b[0];
+  for (int i = 1; i < n; i++) {
+    y[i]=b[i]-l[i]*y[i-1];
+  }
+  x[n-1]=y[n-1]/u[n-1];
+  for (int i = n-2; i >= 0; i--) {
+    x[i]=(y[i]-v[i]*x[i+1])/u[i];
+  }
+}
 
 int main(void) {
-
-  float dt, dx;
-  scanf("%f", &dt);
-  scanf("%f", &dx);
-
-  float  Un1[n], Un2[n], Un3[n], Un4[n], Un20[n];
-
-  
-
-  Un_instant_t (Un1, 1, dt, dx);
-  Un_instant_t (Un2, 2, dt, dx);
-  Un_instant_t (Un3, 3, dt, dx);
-  Un_instant_t (Un4, 4, dt, dx);
-  Un_instant_t (Un20, 20, dt, dx);
-
-  FILE *out1 = fopen("Un1.txt","wt");
-  for(int i = 0; i<n; i++) {
-    fprintf(out1,"%f\t%f\n", i*dx-10, Un1[i]);
-  }
-  fclose(out1);
-  
-  afficher_vect(Un1);
-  afficher_vect(Un20);
-  
+  float un[n], un1[n], y[n];
+  float a[n], d[n], c[n], l[n], u[n], v[n];
+  float dt=100, dx=20./(n-1);
+  float mu=dt/(dx*dx);
+  initU(un);
+  init_C(mu, a, c, d);
+  factoriser_tridiago(d, c, a, l, u, v);
+  for(int i=0; i<1; i++) {
+    resol_LU_Neumann(l, u, v, un1, un);
+    CopyTab(un, un1);
+    }
+  afficher_vect(un);
   return 0;
 }
