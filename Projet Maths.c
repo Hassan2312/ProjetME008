@@ -21,8 +21,8 @@ void init_A(float h, float a[n], float c[n], float d[n]) {
     c[i] = h;
     d[i] = 1 - 2 * h;
   }
-  a[n - 1] = 2*h;
-  c[0] = 2*h;
+  a[n - 1] = 2 * h;
+  c[0] = 2 * h;
 }
 
 void initU(float Un[n]) {
@@ -48,22 +48,21 @@ void updateUn(float Un[n], float dt, float dx) {
   CopyTab(Un, Un1);
 }
 
-void Un_instant_t (float Unt[n], float instant, float dt, float dx) {
+void Un_instant_t(float Unt[n], float instant, float dt, float dx) {
   initU(Unt);
   for (int i = 0; i * dt < instant; i++) {
-    updateUn(Unt, dt, dx);
-    }
-}
-
-void Un_x_fixe (float Ut_x[taille], int position, float dt, float dx) {
-  float Unt[n];
-  initU(Unt);
-  for(int i=0; i<taille; i++) {
-    Ut_x[i]=Unt[position];
     updateUn(Unt, dt, dx);
   }
 }
 
+void Un_x_fixe(float Ut_x[taille], int position, float dt, float dx) {
+  float Unt[n];
+  initU(Unt);
+  for (int i = 0; i < taille; i++) {
+    Ut_x[i] = Unt[position];
+    updateUn(Unt, dt, dx);
+  }
+}
 
 int main(void) {
 
@@ -71,25 +70,27 @@ int main(void) {
   scanf("%f", &dt);
   scanf("%f", &dx);
 
-  float  Un1[n], Un2[n], Un3[n], Un4[n], Un20[n], Ut_10[taille];
+  float Un1[n], Un2[n], Un3[n], Un4[n], Un20[n], Ut_pos[taille];
 
-  
+  Un_instant_t(Un1, 1, dt, dx);
+  Un_instant_t(Un2, 2, dt, dx);
+  Un_instant_t(Un3, 3, dt, dx);
+  Un_instant_t(Un4, 4, dt, dx);
+  Un_instant_t(Un20, 20, dt, dx);
 
-  Un_instant_t (Un1, 1, dt, dx);
-  Un_instant_t (Un2, 2, dt, dx);
-  Un_instant_t (Un3, 3, dt, dx);
-  Un_instant_t (Un4, 4, dt, dx);
-  Un_instant_t (Un20, 20, dt, dx);
-
-  FILE *out1 = fopen("Un1.txt","wt");
-  for(int i = 0; i<n; i++) {
-    fprintf(out1,"%f\t%f\n", i*dx-10, Un1[i]);
+  FILE *instant = fopen("Un1.txt", "wt");
+  for (int i = 0; i < n; i++) {
+    fprintf(instant, "%f\t%f\n", i * dx - 10, Un1[i]);
   }
-  fclose(out1);
-  Un_x_fixe (Ut_10, 10, dt, dx);
-  afficher_vect(Ut_10, 20);
-  //afficher_vect(Un20, n);
-  
+  fclose(instant);
+
+  FILE *position = fopen("Un_10.txt", "wt");
+  Un_x_fixe(Ut_pos, 10, dt, dx);
+  for (int i = 0; i < taille; i++) {
+    fprintf(position, "%f\t%f\n", i * dt, Ut_pos[i]);
+  }
+  fclose(position);
+  // afficher_vect(Un20, n);
+
   return 0;
 }
- 
