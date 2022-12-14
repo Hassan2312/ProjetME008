@@ -92,10 +92,8 @@ void save_instant_T(float Unt[n],float dt,float dx,float tmax,float u0,float u10
   b[n-1] = u100*h;
   init(h, a, c, d);
   initU(Unt);
-
-
-  for (int i = 0; i * dt < list_t[lenght-1]; i++) {
-    if (i*dt>list_t[currentTimeIndex])
+  for (int i = 0; (i * dt) <= list_t[lenght-1]; i++) {
+    if (i*dt>=list_t[currentTimeIndex])
     { 
       fprintVect(out,Unt,n,i*dt);
       currentTimeIndex++;
@@ -144,24 +142,24 @@ int main(void) {
   dt=0.01;
   dx=0.2;
   float Un1[n], Un2[n], Un3[n], Un4[n], Un200[n];
-  float u0 = 1;          //Dirichlet u(x=-10, t) = 1
-  float u100 = 10;       //Dirichlet u(x=10, t) = 10
+  float u0 = 1;         ///Dirichlet u(x=-10, t) = 1
+  float u100 = 1;       ///Dirichlet u(x=10, t) = 10
 
-  float list_t[3] = {1,2,199};
+  float list_t[5] = {1,2,3,4,20};
 
   float list_x[5] = {-8,-4,0,4,8};
 
 
 
-  save_instant_T(Un1,dt,dx,200,u0,u100,list_t,2);
+  save_instant_T(Un1,dt,dx,200,u0,u100,list_t,5);
 
   
-  //save_position_X(Un2,dt,dx,200,u0,u100,list_x,5);
+  save_position_X(Un2,dt,dx,200,u0,u100,list_x,5);
 
 
 
-  system("(cd Script && gnuplot Explicite_Dirichlet_2.p)");
-  //system("(cd Script && gnuplot Explicite_Dirichlet_3.p)");
+  system("(cd Script && gnuplot Explicite_Dirichlet_2_q9.p)");
+  system("(cd Script && gnuplot Explicite_Dirichlet_3_q9.p)");
 
   return 0;
 }
