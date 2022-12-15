@@ -94,7 +94,7 @@ void save_instant_T(float Unt[n],float dt,float dx,float tmax,float u0,float u10
   initU(Unt);
 
 
-  for (int i = 0; i * dt < list_t[lenght-1]; i++) {
+  for (int i = 0; i * dt <= list_t[lenght-1]; i++) {
     if (i*dt>list_t[currentTimeIndex])
     { 
       fprintVect(out,Unt,n,i*dt);
@@ -122,12 +122,15 @@ void save_position_X(float Unt[n],float dt,float dx,float tmax,float u0,float u1
   FILE *out1 = fopen("output/Explicite_Dirichlet_3.dat","wt");
   
  
-  for (int i = 0; i * dt < 200; i++) {
+  for (int i = 0; i * dt < tmax; i++) {
     fprintf( out1, "%f\t", i*dt); //Impression du temps au debut de la ligne 
     for (int j = 0; j < lenght; j++)
-    {
-      int k = ((int)(list_x[j]/proportionalite))+(n/2);
-      fprintf(out1, "%f\t",Unt[k]);
+    { 
+      for (int k = 0; (k*dx)-10 < 20; k++)
+      {
+        if (k*dx == list_x[j])
+         fprintf(out1, "%f\t",Unt[k]);
+      }
     }
     fprintf(out1,"\n");
     
@@ -138,6 +141,15 @@ void save_position_X(float Unt[n],float dt,float dx,float tmax,float u0,float u1
 }
 
 
+void Un_x_fixe(float a[n], float c[n], float d[n],float b[n],float Ut_x[200000], int position, float dt, float dx) {
+  float Unt[n];
+  initU(Unt);
+  for (int i = 0; i < 200000; i++) {
+    Ut_x[i] = Unt[position];
+    updateUn(a, c, d, Unt, b);
+  }
+}
+
 int main(void) {
 
   float dt, dx;
@@ -147,21 +159,21 @@ int main(void) {
   float u0 = 1;          //Dirichlet u(x=-10, t) = 1
   float u100 = 10;       //Dirichlet u(x=10, t) = 10
 
-  float list_t[3] = {1,2,199};
+  float list_t[5] = {1,2,3,4,199};
 
   float list_x[5] = {-8,-4,0,4,8};
 
 
 
-  save_instant_T(Un1,dt,dx,200,u0,u100,list_t,2);
+  save_instant_T(Un1,dt,dx,200,u0,u100,list_t,5);
 
   
-  //save_position_X(Un2,dt,dx,200,u0,u100,list_x,5);
+  save_position_X(Un2,dt,dx,200,u0,u100,list_x,5);
 
 
 
   system("(cd Script && gnuplot Explicite_Dirichlet_2.p)");
-  //system("(cd Script && gnuplot Explicite_Dirichlet_3.p)");
+  system("(cd Script && gnuplot Explicite_Dirichlet_3.p)");
 
   return 0;
 }
