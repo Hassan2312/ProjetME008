@@ -5,7 +5,7 @@
 void afficher_vect(float x[n]) {
   int i;
   printf("--------------------------------------\n");
-  for (i = 0; i < n; i++)
+  for (i = 0; i < taille; i++)
     printf("%f\n", x[i]);
   printf("--------------------------------------\n");
 }
@@ -43,7 +43,6 @@ void updateUn(float a[n], float c[n], float d[n], float Un[n]) {
 
 void Un_instant_t (float Unt[n], float instant, float dt, float dx) {
   float a[n], c[n], d[n];
-  float l[n], u[n], v[n];
   float h = dt / (dx * dx);
   init_A(h, a, c, d);
   initU(Unt);
@@ -52,8 +51,11 @@ void Un_instant_t (float Unt[n], float instant, float dt, float dx) {
     }
 }
 
-void Un_x_fixe (float a[n], float c[n], float d[n], float Ut_x[taille], int position) {
+void Un_x_fixe (float Ut_x[taille], int position, float dt, float dx) {
   float Unt[n];
+  float a[n], c[n], d[n];
+  float h = dt / (dx * dx);
+  init_A(h, a, c, d);
   initU(Unt);
   for(int i=0; i<taille; i++) {
     Ut_x[i]=Unt[position];
@@ -67,8 +69,10 @@ int main(void) {
   scanf("%f", &dt);
   scanf("%f", &dx);
 
-  float  Un1[n], Un2[n], Un3[n], Un4[n], Un20[n];
-
+  float  Un1[n], Un2[n], Un3[n], Un4[n], Un20[n], Ut8[taille];
+ 
+ 
+ Un_x_fixe (Ut8, 8, dt, dx);
 
 
   Un_instant_t (Un1, 1, dt, dx);
@@ -82,8 +86,7 @@ int main(void) {
   }
   fclose(out1);
 
-  afficher_vect(Un1);
-  afficher_vect(Un20);
+  afficher_vect(Ut8);
 
   return 0;
 }
