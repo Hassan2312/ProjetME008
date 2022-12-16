@@ -120,17 +120,21 @@ void save_position_X(float Unt[n],float dt,float dx,float tmax,float u0,float u1
   initU(Unt);
 
   FILE *out1 = fopen("output/Explicite_Dirichlet_3.dat","wt");
+  fprintf(out1,"\t");
+
+  for (int i = 0; i < lenght; i++)
+    fprintf( out1, "x=%f\t", list_x[i]);
   
- 
+  fprintf(out1,"\n");
+  
   for (int i = 0; i * dt < tmax; i++) {
     fprintf( out1, "%f\t", i*dt); //Impression du temps au debut de la ligne 
     for (int j = 0; j < lenght; j++)
     { 
-      for (int k = 0; (k*dx)-10 < 20; k++)
-      {
-        if (k*dx == list_x[j])
-         fprintf(out1, "%f\t",Unt[k]);
-      }
+      
+      int k = ((int)((list_x[j]+10)/dx));
+      fprintf(out1, "%f\t",Unt[k]);
+      
     }
     fprintf(out1,"\n");
     
