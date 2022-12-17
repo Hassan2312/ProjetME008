@@ -30,11 +30,11 @@ void init_un(float un[n]) {
   int mid = (int)(n/2);
   for (int i = 0; i < n; i++) {
     if (i < mid)
-      Un[i] = 1;
+      un[i] = 1;
     else
-      Un[i] = 10;
+      un[i] = 10;
   }
-  Un[mid] = 5.5;
+  un[mid] = 5.5;
 }
 
 void init_C(float h, float a[n], float c[n], float d[n], int cond) {
@@ -74,18 +74,28 @@ void resol_LU(float l[n], float u[n], float v[n], float x[n], float b[n]) {
   }
 }
 
-int main(void) {
-  float un[n], un1[n], y[n];
+void un_instant_t(float unt[n], float instant, float dt, float dx, int cond) {
+  float un[n], y[n];
   float a[n], d[n], c[n], l[n], u[n], v[n];
-  float dt=0.001, dx=20./(n-1);
-  float mu=dt/(dx*dx);
+  float mu = dt / (dx * dx);
   init_un(un);
   init_C(mu, a, c, d, cond);
   factoriser_tridiago(d, c, a, l, u, v);
-  for(int i=0; i<200/dt; i++) {
-    resol_LU(l, u, v, un1, un);
-    CopyTab(un, un1);
+  for(int i=0; i<instant/dt; i++) {
+    resol_LU(l, u, v, unt, un);
+    CopyTab(un, unt);
     }
-  afficher_vect(un);
+}
+
+int main(void) {
+  float un200[n];
+  float dt=0.001, dx=20./(n-1);
+  int cond;
+  
+  printf("Bonjour!\nChoisissez les conditions aux limites:\n\n\t1. Neumann-Neumann\t\t2. Dirichlet-Dirichlet\t\t3. Dirichlet-Neumann\n\nSaisir un numéro =>");
+  scanf("%d", &cond);
+
+  un_instant_t(un200, 200, dt, dx, cond);
+  afficher_vect(un200);
   return 0;
 }
