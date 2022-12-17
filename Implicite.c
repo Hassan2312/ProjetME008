@@ -26,7 +26,7 @@ void CopyTab(float a[n], float b[n]) {
     a[i] = b[i];
 }
 
-void initU(float Un[n]) {
+void init_un(float un[n]) {
   int mid = (int)(n/2);
   for (int i = 0; i < n; i++) {
     if (i < mid)
@@ -37,17 +37,32 @@ void initU(float Un[n]) {
   Un[mid] = 5.5;
 }
 
-void init_C(float h, float a[n], float c[n], float d[n]) {
+void init_C(float h, float a[n], float c[n], float d[n], int cond) {
   for (int i = 0; i < n; i++) {
     a[i] = -h;
     c[i] = -h;
     d[i] = 1 + 2 * h;
   }
-  c[0] = -2*h;
-  a[n - 1] = -2*h;
+  switch(cond) {
+    case 1:
+      c[0] = -2*h;
+      a[n-1] = -2*h;
+      break;
+    case 2:
+      d[0] = 1;
+      c[0] = 0;
+      d[n-1] = 1;
+      a[n-1] = 0;
+      break;
+    case 3:
+      d[0] = 1;
+      c[0] = 0;
+      a[n-1] = -2*h;
+      break;
+    }
 }
 
-void resol_LU_Neumann(float l[n], float u[n], float v[n], float x[n], float b[n]) {
+void resol_LU(float l[n], float u[n], float v[n], float x[n], float b[n]) {
   float y[n];
   y[0]=b[0];
   for (int i = 1; i < n; i++) {
@@ -62,13 +77,13 @@ void resol_LU_Neumann(float l[n], float u[n], float v[n], float x[n], float b[n]
 int main(void) {
   float un[n], un1[n], y[n];
   float a[n], d[n], c[n], l[n], u[n], v[n];
-  float dt=100, dx=20./(n-1);
+  float dt=0.001, dx=20./(n-1);
   float mu=dt/(dx*dx);
-  initU(un);
-  init_C(mu, a, c, d);
+  init_un(un);
+  init_C(mu, a, c, d, cond);
   factoriser_tridiago(d, c, a, l, u, v);
-  for(int i=0; i<1; i++) {
-    resol_LU_Neumann(l, u, v, un1, un);
+  for(int i=0; i<200/dt; i++) {
+    resol_LU(l, u, v, un1, un);
     CopyTab(un, un1);
     }
   afficher_vect(un);
