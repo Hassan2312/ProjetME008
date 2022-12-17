@@ -6,16 +6,16 @@ int doubleComparator ( const void * first, const void * second ) {
     return (int) (firstDouble - secondDouble);
 }
 
-void sortFloatTab(float tab[],int lenght){
-    qsort( tab, lenght, sizeof(float), doubleComparator );
+void sortFloatTab(float tab[],int length){
+    qsort( tab, length, sizeof(float), doubleComparator );
 }
 
-void fprintVect(FILE* out,float Unt[],int lenght,float t){
+void fprintVect(FILE* out,float Unt[],int length,float t, float dx){
     fprintf(out,"\"U(t) a t = %f\"\n",t);
 
-    for (int i = 0; i < lenght; i++)
+    for (int i = 0; i < length; i++)
     {
-        fprintf(out,"%d\t%f\n",i,Unt[i]);
+        fprintf(out,"%f\t%f\n",i*dx-10,Unt[i]);
     }
     fprintf(out,"\n\n");
 }
