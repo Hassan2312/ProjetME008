@@ -22,9 +22,19 @@ void fprintVect(FILE* out,float Unt[],int length,float t, float dx){
 }
 
 
-float norme_diff_Vect(float U1[], float U2[], int length){
+float norme2_diff_Vect(float U1[], float U2[], int length){
     float res = 0;
     for (int i = 0; i < length; i++)
-        res+= fabs(U2[i]-U1[i]);
+        res+= sqrt((U2[i]-U1[i])*(U2[i]-U1[i]));
     return res;
+}
+
+float norme_inf_diff_Vect(float U1[], float U2[], int length){
+    float max = 0;
+    for (int i = 0; i < length; i++){
+        if (fabs(U2[i]-U1[i])>max)
+            max = fabs(U2[i]-U1[i]);
+    }
+        
+    return max;
 }

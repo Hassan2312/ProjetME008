@@ -157,7 +157,7 @@ void compare_dt(float dt, float dx, float tmax,int imin,int imax, int cond){
     printf("%d\t%f",i,dt2);
     afficher_vect(Unt2);
     
-    fprintf(out,"%d\t%f\n",i,norme_diff_Vect(Unt,Unt2,n));
+    fprintf(out,"%d\t%f\n",i,norme2_diff_Vect(Unt,Unt2,n));
   }
   
   fclose(out);
