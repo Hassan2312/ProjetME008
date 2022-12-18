@@ -127,6 +127,43 @@ void save_instant_T(float dt, float dx, float list_t[], int length, int cond){
 
 }
 
+void compare_dt(float dt, float dx, float tmax,int imin,int imax, int cond){
+  float Unt[n],Unt2[n];
+  float a[n], c[n], d[n];
+  float a2[n], c2[n], d2[n];
+  float dt2;
+  float h = dt / (dx * dx);
+  float h2;
+  
+  init_A(h, a, c, d, cond);
+  init_un(Unt);
+
+  FILE* out = fopen("output/divergenceExplicite.dat","wt");
+
+  for (int i = 0; i*dt < tmax; i++)
+    update_un(a,c,d,Unt);
+  
+  afficher_vect(Unt);
+
+  for (int i = imin; i < imax; i++)
+  {
+    dt2 = i*dt;
+    h2 = dt2/(dx * dx);
+    init_A(h2, a2, c2, d2, cond);
+    init_un(Unt2);
+    
+    for (int j = 0; j*dt2<tmax ; j++)
+      update_un(a2,c2,d2,Unt2);
+    printf("%d\t%f",i,dt2);
+    afficher_vect(Unt2);
+    
+    fprintf(out,"%d\t%f\n",i,norme_diff_Vect(Unt,Unt2,n));
+  }
+  
+  fclose(out);
+}
+
+
 int main(void) {
 
   float dt, dx;
@@ -147,13 +184,16 @@ int main(void) {
 
   save_instant_T(dt, dx, list_t, 5, cond);
   save_position_x(dt, dx, 200, list_x, 5, cond);
-	
-  float u200[n];
-  un_instant_t(u200, 200, dt, dx, cond);
-  afficher_vect(u200);
 
-  system("(cd Script && gnuplot Explicite_Dirichlet_2_q9.p)");
-  system("(cd Script && gnuplot Explicite_Dirichlet_3_q9.p)");
+  //compare_dt(dt,dx,200,1,50,cond);
+	
+  // float u200[n];
+  // un_instant_t(u200, 200, dt, dx, cond);
+  // afficher_vect(u200);
+
+  system("(cd Script && gnuplot Explicite_Dirichlet_2.p)");
+  system("(cd Script && gnuplot Explicite_Dirichlet_3.p)");
+  system("(cd Script && gnuplot divergence.p)");
 
   return 0;
 }
