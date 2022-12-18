@@ -176,7 +176,7 @@ int main(void) {
   printf("Bonjour!\nChoisissez les conditions aux limites:\n\n\t1. Neumann-Neumann\t\t2. Dirichlet-Dirichlet\t\t3. Dirichlet-Neumann\n\nSaisir un numéro =>");
   scanf("%d", &cond);
   
-  float list_t[5] = {1,2,3,4,200};
+  float list_t[5] = {1,2,3,4,199};
 
   float list_x[5] = {-8,-4,0,4,8};
 
@@ -185,7 +185,7 @@ int main(void) {
   save_instant_T(dt, dx, list_t, 5, cond);
   save_position_x(dt, dx, 200, list_x, 5, cond);
 
-  //compare_dt(dt,dx,200,1,50,cond);
+  compare_dt(dt,dx,200,1,50,cond);
 	
   // float u200[n];
   // un_instant_t(u200, 200, dt, dx, cond);
