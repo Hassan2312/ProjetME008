@@ -12,7 +12,6 @@ void fprintVect(FILE* out,float Unt[],int length,float t, float dx){
     fprintf(out,"\n\n");
 }
 
-
 float norme2_diff_Vect(float U1[], float U2[], int length){
     float res = 0;
     for (int i = 0; i < length; i++)
