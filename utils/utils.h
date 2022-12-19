@@ -12,7 +12,7 @@ void sortFloatTab(float tab[],int length){
 }
 
 void fprintVect(FILE* out,float Unt[],int length,float t, float dx){
-    fprintf(out,"\"U(t) a t = %f\"\n",t);
+    fprintf(out,"\"U(t) à t = %.1f\"\n", t);
 
     for (int i = 0; i < length; i++)
     {

@@ -85,7 +85,14 @@ void save_position_x(float dt, float dx, float tmax, float list_x[], int length,
 
   FILE* out = fopen("output/Explicite_Dirichlet_3.dat","wt");
   
-  for(double i = 0; i*dt < tmax + dt ; i++) {
+  for(int i = 0; i*dt < tmax + dt ; i++) {
+	  if(i == 0) {
+		  fprintf( out, "t\t");
+			  for(int k = 0; k < length; k++) {
+				  fprintf( out, "x=%.2f\t", list_x[k]);
+			  }
+			  fprintf( out, "\n");
+		  }
 	  fprintf( out, "%f\t", i*dt);           //Impression du temps au debut de la ligne 
 	  for(int j = 0; j < length; j++) {              //Parcours de la liste de positions
 		  position = (int)((list_x[j] + 10)/dx);
