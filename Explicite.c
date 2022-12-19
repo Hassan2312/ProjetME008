@@ -27,9 +27,9 @@ void init_A(float mu, float a[n], float c[n], float d[n], int cond) {
   switch(cond) {
     case 1:
       c[0] = 2*mu;
-      a[n-1] = 2*mu;
-      break;
-    case 2:
+      a[n-1] = 2*mu;              //Vu que A est identique partout sauf pour la première et dernière ligne
+      break;                     // Il suffit de créer trois conditions et changer uniquement les premières
+    case 2:                       // et dernières composantes de nos vecteurs
       d[0] = 1;
       c[0] = 0;
       d[n-1] = 1;
@@ -89,7 +89,7 @@ void save_position_x(float dt, float dx, float tmax, float list_x[], int length,
 	  if(i == 0) {
 		  fprintf( out, "t\t");
 			  for(int k = 0; k < length; k++) {
-				  fprintf( out, "x=%.2f\t", list_x[k]);
+				  fprintf( out, "x=%.2f\t", list_x[k]);    //Impression des titres des colonnes pour gnuplot
 			  }
 			  fprintf( out, "\n");
 		  }
