@@ -192,8 +192,8 @@ int main(void) {
   save_instant_T(dt, dx, list_t, 5, cond);
   save_position_x(dt, dx, 200, list_x, 5, cond);
 
-  compare_dt(dt,dx,200,1,50,cond);
-	
+  compare_dt(dt,dx,200,1,22,cond);   //affiche u200 pour chaque dt allant de 1*dt
+	                                 // jusqu'a 22*dt
   // float u200[n];
   // un_instant_t(u200, 200, dt, dx, cond);
   // afficher_vect(u200);
