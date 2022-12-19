@@ -83,7 +83,7 @@ void save_position_x(float dt, float dx, float tmax, float list_x[], int length,
   init_A(mu, a, c, d, cond);
   init_un(unt);
 
-  FILE* out = fopen("output/Explicite_Dirichlet_3.dat","wt");
+  FILE* out = fopen("output/Positions_Explicite.dat","wt");
   
   for(int i = 0; i*dt < tmax + dt ; i++) {
 	  if(i == 0) {
@@ -115,7 +115,7 @@ void save_instant_T(float dt, float dx, float list_t[], int length, int cond){
   init_A(mu, a, c, d, cond);
   init_un(Unt);
 
-  FILE* out = fopen("output/Explicite_Dirichlet_2.dat","wt");
+  FILE* out = fopen("output/Instants_Explicite.dat","wt");
 
   //Parcours de la liste de temps
   int currentTimeIndex = 0;
@@ -198,8 +198,8 @@ int main(void) {
   // un_instant_t(u200, 200, dt, dx, cond);
   // afficher_vect(u200);
 
-  system("(cd Script && gnuplot Explicite_Dirichlet_2.p)");
-  system("(cd Script && gnuplot Explicite_Dirichlet_3.p)");
+  system("(cd Script && gnuplot Instants_Explicite.p)");
+  system("(cd Script && gnuplot Positions_Explicite.p)");
   system("(cd Script && gnuplot divergence.p)");
 
   return 0;
