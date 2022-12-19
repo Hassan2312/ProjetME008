@@ -85,7 +85,7 @@ void save_position_x(float dt, float dx, float tmax, float list_x[], int length,
 
   FILE* out = fopen("output/Explicite_Dirichlet_3.dat","wt");
   
-  for(int i = 0; i < tmax/dt; i++) {
+  for(double i = 0; i*dt < tmax + dt ; i++) {
 	  fprintf( out, "%f\t", i*dt);           //Impression du temps au debut de la ligne 
 	  for(int j = 0; j < length; j++) {              //Parcours de la liste de positions
 		  position = (int)((list_x[j] + 10)/dx);
@@ -113,8 +113,8 @@ void save_instant_T(float dt, float dx, float list_t[], int length, int cond){
   //Parcours de la liste de temps
   int currentTimeIndex = 0;
   
-  for (int i = 0; (i * dt) <= list_t[length-1]; i++) {
-    if (i*dt>=list_t[currentTimeIndex])
+  for (int i = 0; i*dt < list_t[length-1] + dt; i++) {
+    if (i*dt >= list_t[currentTimeIndex])
     { 
       fprintVect(out,Unt,n,i*dt, dx);
       currentTimeIndex++;
@@ -176,7 +176,7 @@ int main(void) {
   printf("Bonjour!\nChoisissez les conditions aux limites:\n\n\t1. Neumann-Neumann\t\t2. Dirichlet-Dirichlet\t\t3. Dirichlet-Neumann\n\nSaisir un numéro =>");
   scanf("%d", &cond);
   
-  float list_t[5] = {1,2,3,4,199};
+  float list_t[5] = {1,2,3,4,200};
 
   float list_x[5] = {-8,-4,0,4,8};
 
