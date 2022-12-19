@@ -18,16 +18,16 @@ void CopyTab(float a[n], float b[n]) {
     a[i] = b[i];
 }
 
-void init_A(float h, float a[n], float c[n], float d[n], int cond) {
+void init_A(float μ, float a[n], float c[n], float d[n], int cond) {
   for (int i = 0; i < n; i++) {
-    a[i] = h;
-    c[i] = h;
-    d[i] = 1 - 2 * h;
+    a[i] = μ;
+    c[i] = μ;
+    d[i] = 1 - 2 * μ;
   }
   switch(cond) {
     case 1:
-      c[0] = 2*h;
-      a[n-1] = 2*h;
+      c[0] = 2*μ;
+      a[n-1] = 2*μ;
       break;
     case 2:
       d[0] = 1;
@@ -38,7 +38,7 @@ void init_A(float h, float a[n], float c[n], float d[n], int cond) {
     case 3:
       d[0] = 1;
       c[0] = 0;
-      a[n-1] = 2*h;
+      a[n-1] = 2*μ;
       break;
     }
 }
@@ -65,9 +65,9 @@ void update_un(float a[n], float c[n], float d[n], float un[n]) {
 
 void un_instant_t(float unt[n], float instant, float dt, float dx, int cond) {
   float a[n], c[n], d[n];
-  float h = dt / (dx * dx);
+  float μ = dt / (dx * dx);
   init_un(unt);
-  init_A(h, a, c, d, cond);
+  init_A(μ, a, c, d, cond);
   for (int i = 0; i * dt < instant; i++) {
     update_un(a, c, d, unt);
   }
@@ -77,10 +77,10 @@ void un_instant_t(float unt[n], float instant, float dt, float dx, int cond) {
 void save_position_x(float dt, float dx, float tmax, float list_x[], int length, int cond){
   float unt[n];
   float a[n], c[n], d[n];
-  float h = dt / (dx * dx);
+  float μ = dt / (dx * dx);
   int position;
   
-  init_A(h, a, c, d, cond);
+  init_A(μ, a, c, d, cond);
   init_un(unt);
 
   FILE* out = fopen("output/Explicite_Dirichlet_3.dat","wt");
@@ -110,9 +110,9 @@ void save_position_x(float dt, float dx, float tmax, float list_x[], int length,
 void save_instant_T(float dt, float dx, float list_t[], int length, int cond){
   float Unt[n];
   float a[n], c[n], d[n];
-  float h = dt / (dx * dx);
+  float μ = dt / (dx * dx);
   
-  init_A(h, a, c, d, cond);
+  init_A(μ, a, c, d, cond);
   init_un(Unt);
 
   FILE* out = fopen("output/Explicite_Dirichlet_2.dat","wt");
@@ -139,10 +139,10 @@ void compare_dt(float dt, float dx, float tmax,int imin,int imax, int cond){
   float a[n], c[n], d[n];
   float a2[n], c2[n], d2[n];
   float dt2;
-  float h = dt / (dx * dx);
-  float h2;
+  float μ = dt / (dx * dx);
+  float μ2;
   
-  init_A(h, a, c, d, cond);
+  init_A(μ, a, c, d, cond);
   init_un(Unt);
 
   FILE* out = fopen("output/divergenceExplicite.dat","wt");
@@ -155,8 +155,8 @@ void compare_dt(float dt, float dx, float tmax,int imin,int imax, int cond){
   for (int i = imin; i < imax; i++)
   {
     dt2 = i*dt;
-    h2 = dt2/(dx * dx);
-    init_A(h2, a2, c2, d2, cond);
+    μ2 = dt2/(dx * dx);
+    init_A(μ2, a2, c2, d2, cond);
     init_un(Unt2);
     
     for (int j = 0; j*dt2<tmax ; j++)
