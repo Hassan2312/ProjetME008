@@ -1,4 +1,4 @@
-datafile = '../output/Explicite_Dirichlet_3.dat'
+datafile = '../output/Positions_Explicite.dat'
 stats datafile
 set key autotitle columnheader
 set title "Concentration a position fixe en fonction du temps"
