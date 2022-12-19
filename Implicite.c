@@ -37,16 +37,16 @@ void init_un(float un[n]) {
   un[mid] = 5.5;
 }
 
-void init_C(float μ, float a[n], float c[n], float d[n], int cond) {
+void init_C(float mu, float a[n], float c[n], float d[n], int cond) {
   for (int i = 0; i < n; i++) {
-    a[i] = -μ;
-    c[i] = -μ;
-    d[i] = 1 + 2 * μ;
+    a[i] = -mu;
+    c[i] = -mu;
+    d[i] = 1 + 2 * mu;
   }
   switch(cond) {
     case 1:
-      c[0] = -2*μ;
-      a[n-1] = -2*μ;
+      c[0] = -2*mu;
+      a[n-1] = -2*mu;
       break;
     case 2:
       d[0] = 1;
@@ -57,7 +57,7 @@ void init_C(float μ, float a[n], float c[n], float d[n], int cond) {
     case 3:
       d[0] = 1;
       c[0] = 0;
-      a[n-1] = -2*μ;
+      a[n-1] = -2*mu;
       break;
     }
 }
@@ -77,9 +77,9 @@ void resol_LU(float l[n], float u[n], float v[n], float x[n], float b[n]) {
 void un_instant_t(float unt[n], float instant, float dt, float dx, int cond) {
   float un[n], y[n];
   float a[n], d[n], c[n], l[n], u[n], v[n];
-  float μ = dt / (dx * dx);
+  float mu = dt / (dx * dx);
   init_un(un);
-  init_C(μ, a, c, d, cond);
+  init_C(mu, a, c, d, cond);
   factoriser_tridiago(d, c, a, l, u, v);
   for(int i=0; i<instant/dt; i++) {
     resol_LU(l, u, v, unt, un);
