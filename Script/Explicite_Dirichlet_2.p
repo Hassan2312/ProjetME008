@@ -1,4 +1,4 @@
-datafile = '../output/Explicite_Dirichlet_2.dat'
+datafile = '../output/Instants_Explicite.dat'
 stats datafile
 set title "Concentration en fonction de la position a differents temps"
 set xlabel "Position (x)"
